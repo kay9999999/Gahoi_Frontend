@@ -1,248 +1,146 @@
-import { Link } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const dropdownRef = useRef(null);
-  const timeoutRef = useRef(null);
-
-  const handleMouseEnter = (label) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setActiveDropdown(label);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 100);
-  };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setActiveDropdown(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
-  const menuItems = [
-    { to: '/', label: 'Home' },
-    { 
-      to: '/about', 
-      label: 'Matrimonial',
-      dropdown: [
-        { to: '/registration', label: 'पंजीकरण Registration' },
-        { to: '/matrimonialsearch', label: 'खोजना Search' },
-        { to: '/Change', label: 'परिर्वतन Change / लॉग इन Login' },
-      ]
-    },
-    { 
-      to: '/plans', 
-      label: 'Family',
-      dropdown: [
-        { to: '/Familyregistration', label: 'पंजीकरण Registration' },
-        { to: '/Familyssearch', label: 'खोजना Search' },
-        { to: '/FamilyChange', label: 'परिर्वतन Change / लॉग इन Login' },
-      ]
-    },
-    { 
-      to: '/blog', 
-      label: 'Resources',
-      dropdown: [
-        { to: '/Hostelry', label: 'धर्मशाला Hostelry' },
-        { to: '/temple', label: 'मंदिर Temple' },
-        { to: '/touristplace', label: 'दर्शनीय स्थल Tourist place' },
-      ]
-    },
-    { 
-      to: '/contact', 
-      label: 'Business Listing',
-      dropdown: [
-        { to: '/business_login', label: 'Login' },
-        { to: '/free_listing', label: 'Free Listing' },
-        { to: '/business_search', label: 'Search' }
-      ]
-    },
-    { 
-      to: '/gallery', 
-      label: 'Gallery',
-      dropdown: [
-        { to: '/gallery/photos', label: 'महासभा Central Assembly' },
-        { to: '/RegionalAssembly', label: 'क्षेत्रीय सभायें Regional Assembly' },
-        { to: '/CommunalMarriage', label: 'सामूहिक विवाह ommunal Marriage' },
-        { to: '/OtherProgram', label: 'अन्य कार्यक्रम Other Program' },
-      ]
-    },
-    { 
-      to: '/executive', 
-      label: 'Executive',
-      dropdown: [
-        { to: '/gallery/photos', label: 'महासभा entral Assembly' },
-        { to: '/ExecutiveRegionalAssembly', label: 'क्षेत्रीय सभायें Regional Assembly' },
-        { to: '/Arbitrament', label: 'पंचायत Arbitrament' },
-      ]
-    },
-    { 
-      to: '/publication', 
-      label: 'Publication',
-      dropdown: [
-        { to: '/GahoiBandhan', label: 'गहोई बंधन' },
-        { to: '/GahoiBandhu', label: 'गहोई बन्धु ' },
-        { to: '/', label: 'गहोई दर्पण' },
-        { to: '/AnyaPatrikayen', label: 'अन्य पत्रिकाएं' },
-        { to: '/', label: 'स्मारिकाएं' },
-      ]
-    },
-    { 
-      to: '/literature', 
-      label: 'Literature',
-      dropdown: [
-        { to: '/NationalPoet', label: 'राष्ट्रकवि National Poet' },
-        { to: '/', label: 'अन्य कवि Other Poet' },
-   
-      ]
-    },
-    { 
-      to: '/history', 
-      label: 'History',
-      dropdown: [
-        { to: '/HistoryGahoiSamaj', label: 'इतिहास गहोई समाज' },
-        { to: '/HistoryMahasabha', label: 'इतिहास महासभा' },
-        { to: '/HistoryKashetriyaSabha', label: 'इतिहास क्षेत्रीय सभा' }
-      ]
-    }
-  ];
-
+const Footer = () => {
   return (
-    <header className="absolute top-0 left-0 right-0 z-50">
-      <nav className="container mx-auto px-4 py-2">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-3">
-            <img 
-              src="https://www.gahoi.co.in/images/logo.png" 
-              alt="Gahoi Logo" 
-              className="h-12 sm:h-16 md:h-20 w-auto"
-            />
-            {/* <span className="text-xl sm:text-2xl font-bold text-white drop-shadow-lg">श्री गहोई शक्ति</span> */}
-          </Link>
-
-          {/* Mobile Menu Button */}
-          <button 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-            aria-label="Toggle menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-4 lg:space-x-6 items-center" ref={dropdownRef}>
-            {menuItems.map((item) => (
-              <div 
-                key={item.to}
-                className="relative group"
-                onMouseEnter={() => handleMouseEnter(item.label)}
-                onMouseLeave={handleMouseLeave}
+    <footer className="bg-red-900 text-white py-8 md:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div className="text-center sm:text-left">
+            <h3 className="text-xl font-bold mb-4 text-yellow-100">
+              गहोई समाज इंडिया
+            </h3>
+            <p className="text-red-200">
+              Empowering our community through unity, tradition, and mutual
+              support.
+            </p>
+          </div>
+          <div className="text-center sm:text-left">
+            <h4 className="text-lg font-semibold mb-4 text-yellow-100">
+              Quick Links
+            </h4>
+            <ul className="flex flex-wrap justify-center sm:justify-start">
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/about"
+                  className="text-red-100 hover:text-yellow-100 transition-colors"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/suggestions"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Suggestions
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/PrivacyPolicy"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/LatestNews"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Web Founder Message
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/LatestNews"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Latest News
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/SocialFlagSong"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Social Flag Song
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/Video"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Video
+                </Link>
+              </li>
+              <li className="w-1/2 mb-2">
+                <Link
+                  to="/PrivacyPolicy"
+                  className="text-red-200 hover:text-yellow-100 transition-colors"
+                >
+                  Rite
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="text-center sm:text-left">
+            <h4 className="text-lg font-semibold mb-4 text-yellow-100">
+              Contact Info
+            </h4>
+            <ul className="space-y-2 text-red-200">
+              <li>Email: Gahoiramesh@gmail.com</li>
+              <li>Phone: +91 942 510 9934</li>
+              <li className="text-sm sm:text-base">
+                Address: 23 - Pant Nagar Extension In Front of Sanskar Public
+                School Mahalgaon Gwalior (M.P.)
+              </li>
+            </ul>
+          </div>
+          <div className="text-center sm:text-left">
+            <h4 className="text-lg font-semibold mb-4 text-yellow-100">
+              Follow Us
+            </h4>
+            <div className="flex justify-center sm:justify-start space-x-6">
+              <a
+                href="https://www.facebook.com/Gahoisamjindia"
+                className="group relative w-10 h-10 flex items-center justify-center rounded-full bg-red-200 hover:bg-[#1877f2] transition-colors duration-300"
+                aria-label="Follow us on Facebook"
               >
-                <Link
-                  to={item.to}
-                  className="text-white hover:text-yellow-200 transition-colors drop-shadow-lg text-sm lg:text-base"
+                <svg
+                  className="w-5 h-5 text-red-900 group-hover:text-white transition-colors duration-300"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {item.label}
-                </Link>
-                
-                {/* Dropdown Menu */}
-                {item.dropdown && activeDropdown === item.label && (
-                  <div 
-                    className="absolute top-full left-0 mt-2 w-64 bg-yellow-100 rounded-lg shadow-lg py-2 z-50"
-                    onMouseEnter={() => handleMouseEnter(item.label)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {item.dropdown.map((subItem) => (
-                      <Link
-                        key={subItem.to}
-                        to={subItem.to}
-                        className="block px-4 py-2 text-gray-800 hover:bg-red-700 hover:text-white transition-colors whitespace-nowrap"
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {subItem.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            <Link 
-              to="/registration" 
-              className="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition-colors font-semibold border border-red-600 shadow-lg hover:shadow-red-900/30 text-sm lg:text-base"
-            >
-              Register
-            </Link>
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.instagram.com/gahoisamajindia/"
+                className="group relative w-10 h-10 flex items-center justify-center rounded-full bg-red-200 hover:bg-gradient-to-tr hover:from-[#feda75] hover:via-[#d62976] hover:to-[#4f5bd5] transition-all duration-300"
+                aria-label="Follow us on Instagram"
+              >
+                <svg
+                  className="w-5 h-5 text-red-900 group-hover:text-white transition-colors duration-300"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.25a1.25 1.25 0 1 0-2.5 0 1.25 1.25 0 0 0 2.5 0zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <div 
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-          } overflow-hidden`}
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-black/80 backdrop-blur-sm rounded-lg mt-2">
-            {menuItems.map((item) => (
-              <div key={item.to}>
-                <Link
-                  to={item.to}
-                  className="block px-3 py-2 text-white hover:bg-white/10 rounded-lg transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-                {item.dropdown && (
-                  <div className="pl-4 space-y-1">
-                    {item.dropdown.map((subItem) => (
-                      <Link
-                        key={subItem.to}
-                        to={subItem.to}
-                        className="block px-3 py-2 text-yellow-200 hover:bg-red-700 hover:text-white rounded-lg transition-colors whitespace-nowrap"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {subItem.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            <Link 
-              to="/registration" 
-              className="block px-3 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition-colors font-semibold text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Register
-            </Link>
-          </div>
+        <div className="border-t border-red-800 mt-8 pt-8 text-center text-red-200">
+          <p className="text-sm sm:text-base">
+            &copy; {new Date().getFullYear()} Gahoi Samaj India 2025. All rights
+            reserved.
+          </p>
         </div>
-      </nav>
-    </header>
+      </div>
+    </footer>
   );
 };
 
-export default Header; 
+export default Footer;
