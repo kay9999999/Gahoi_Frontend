@@ -134,7 +134,7 @@ const Footer = () => {
         </div>
         <div className="border-t border-red-800 mt-8 pt-8 text-center text-red-200">
           <p className="text-sm sm:text-base">
-            &copy; {new Date().getFullYear()} Gahoi Samaj India 2025. All rights
+            &copy; Gahoi Samaj India {new Date().getFullYear()}. All rights
             reserved.
           </p>
         </div>

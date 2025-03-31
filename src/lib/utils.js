@@ -6,7 +6,7 @@ export function cn(...inputs) {
 }
 
 export function getStrapiURL() {
-  return process.env.NEXT_PUBLIC_STRAPI_API_URL ?? "http://localhost:1337";
+  return import.meta.env.VITE_PUBLIC_STRAPI_API_URL ?? "http://localhost:1337";
 }
 
 export function formatDate(dateString) {

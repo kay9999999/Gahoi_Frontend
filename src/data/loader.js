@@ -1,5 +1,5 @@
 import qs, { stringify } from "qs";
-import { getStrapiURL } from "@/lib/utils";
+import { getStrapiURL } from "../lib/utils";
 
 const baseUrl = getStrapiURL();
 
@@ -22,4 +22,20 @@ export async function fetchData(url, authToken) {
     console.error("Error fetching data:", error);
     throw error; // or return null;
   }
+}
+
+export async function getHomePageData() {
+  const url = new URL("/api/home-page", baseUrl);
+  url.search = qs.stringify({
+    populate: {
+      logo: {
+        fields: ["url"],
+      },
+      banner: {
+        fields: ["url"],
+      },
+    },
+  });
+
+  return await fetchData(url.href);
 }

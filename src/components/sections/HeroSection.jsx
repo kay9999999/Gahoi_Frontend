@@ -1,25 +1,23 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { getStrapiMedia } from "../../lib/utils";
 
-const HeroSection = () => {
+const HeroSection = ({ response }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const bannerImages = [
-    "/Banner-1.webp",
-    "/Banner-2.webp",
-    "/Banner-3.webp",
-    "/Banner-4.webp",
-  ];
+  // Extract banner array from the response
+  const bannerData = response?.data?.banner;
 
   useEffect(() => {
+    if (!bannerData || bannerData.length === 0) return;
     const timer = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
-        prevIndex === bannerImages.length - 1 ? 0 : prevIndex + 1
+        prevIndex === bannerData.length - 1 ? 0 : prevIndex + 1
       );
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [bannerData]);
 
   const handleDotClick = (index) => {
     setCurrentImageIndex(index);
@@ -27,37 +25,57 @@ const HeroSection = () => {
 
   return (
     <section className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-screen w-full overflow-hidden">
+      {/* Mobile Banner Image (768px and below) */}
       <div
-        className="absolute inset-0 bg-center bg-no-repeat transition-all duration-1000"
+        className="md:hidden absolute inset-0 bg-center bg-no-repeat bg-cover"
         style={{
-          backgroundImage: `url("${bannerImages[currentImageIndex]}")`,
-          backgroundSize: "100% 100%",
+          backgroundImage: `url("/banner-mobile.webp")`,
+          backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
           height: "100%",
           width: "100%",
-          objectFit: "cover",
         }}
       >
-        {/* Overlay */}
         <div className="absolute inset-0 bg-black/20"></div>
       </div>
 
-      {/* Carousel Dots */}
-      <div className="absolute right-2 sm:right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-20 flex flex-col space-y-2 sm:space-y-3 md:space-y-4">
-        {bannerImages.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleDotClick(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded-full transition-all duration-300 ${
-              index === currentImageIndex
-                ? "bg-white scale-125"
-                : "bg-white/40 hover:bg-white/60"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          ></button>
-        ))}
-      </div>
+      {/* Desktop Carousel (above 768px) */}
+      {bannerData && bannerData.length > 0 && (
+        <div
+          className="hidden md:block absolute inset-0 bg-center bg-no-repeat transition-all duration-1000"
+          style={{
+            backgroundImage: `url("${getStrapiMedia(
+              bannerData[currentImageIndex].url
+            )}")`,
+            backgroundSize: "100% 100%",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
+            width: "100%",
+            objectFit: "cover",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/20"></div>
+        </div>
+      )}
+
+      {/* Carousel Dots - Only show on desktop */}
+      {bannerData && bannerData.length > 0 && (
+        <div className="hidden md:flex absolute right-2 sm:right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-20 flex-col space-y-2 sm:space-y-3 md:space-y-4">
+          {bannerData.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className={`w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded-full transition-all duration-300 ${
+                index === currentImageIndex
+                  ? "bg-white scale-125"
+                  : "bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            ></button>
+          ))}
+        </div>
+      )}
 
       <div className="container mx-auto px-4 relative z-10 h-full">
         <div className="flex flex-col justify-center items-center h-full">
